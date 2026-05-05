@@ -296,35 +296,36 @@ export default function App() {
               className="p-8 h-full overflow-y-auto"
             >
               <header className="mb-8">
-                <h2 className="text-2xl font-bold mb-2">Build Automation</h2>
-                <p className="text-zinc-500 max-w-2xl">Instructions for setting up your GitHub repository to automatically build your spoofer EXE via GitHub Actions.</p>
+                <h2 className="text-2xl font-bold mb-2">Build Automation & Export</h2>
+                <p className="text-zinc-500 max-w-2xl">Follow these steps to turn your GhostSpec configuration into a real standalone Windows EXE using GitHub Actions.</p>
               </header>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                {/* Step 1: Link Repo */}
                 <div className="space-y-6">
-                  <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
-                    <h3 className="font-bold flex items-center gap-2 mb-4">
-                      <Terminal className="w-5 h-5 text-terminal-ink" /> Local Build Command
-                    </h3>
-                    <p className="text-sm text-zinc-400 mb-4 font-mono leading-relaxed">
-                      If you are building your spoofer in C# (recommended for hardware access shortcuts), use the following MSBuild config:
+                  <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-black font-bold text-xs">1</div>
+                      <h3 className="font-bold">Export to your GitHub</h3>
+                    </div>
+                    <p className="text-sm text-zinc-400 mb-4 leading-relaxed">
+                      To choose your own repository, go to the <span className="text-white font-semibold">Settings</span> menu in the AI Studio toolbar and select <span className="text-white font-semibold">Export to GitHub</span>.
                     </p>
-                    <pre className="bg-black p-4 rounded text-xs font-mono text-terminal-ink border border-terminal-dim">
-                      dotnet publish -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true
-                    </pre>
+                    <div className="p-3 bg-blue-500/10 border border-blue-500/20 rounded text-[11px] text-blue-400">
+                      This allows you to link your personal GitHub account and create a fresh repository for this project.
+                    </div>
                   </div>
 
                   <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
-                    <h3 className="font-bold flex items-center gap-2 mb-4">
-                      <Github className="w-5 h-5 text-white" /> Action Workflow
-                    </h3>
-                    <p className="text-sm text-zinc-400 mb-4 font-mono leading-relaxed">
-                      Place this in <code className="text-terminal-ink">.github/workflows/build.yml</code>
-                    </p>
-                    <div className="bg-black p-4 rounded text-[10px] font-mono text-zinc-300 overflow-x-auto">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-8 h-8 rounded-full bg-terminal-ink flex items-center justify-center text-black font-bold text-xs">2</div>
+                      <h3 className="font-bold">Workflow Config</h3>
+                    </div>
+                    <p className="text-sm text-zinc-400 mb-2 font-mono">.github/workflows/build.yml</p>
+                    <div className="bg-black p-4 rounded text-[10px] font-mono text-zinc-300 overflow-x-auto max-h-48 overflow-y-auto custom-scrollbar">
                       <pre>
-{`name: Build EXE
-on: [push]
+{`name: Build GhostSpec EXE
+on: [push, workflow_dispatch]
 jobs:
   build:
     runs-on: windows-latest
@@ -332,31 +333,89 @@ jobs:
       - uses: actions/checkout@v4
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Restore dependencies
+        run: dotnet restore
       - name: Build
-        run: dotnet publish -o ./dist
-      - name: Upload Artifact
+        run: dotnet publish -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true -o ./publish
+      - name: Upload EXE
         uses: actions/upload-artifact@v4
         with:
-          name: Spoofer-EXE
-          path: ./dist/*.exe`}
+          name: GhostSpec-Output
+          path: ./publish/*.exe`}
                       </pre>
                     </div>
                   </div>
                 </div>
 
-                <div className="space-y-6">
-                  <div className="bg-terminal-ink/5 border border-terminal-ink/20 rounded-xl p-6">
-                    <h3 className="font-bold text-terminal-ink mb-2">Important Security Note</h3>
-                    <p className="text-sm text-zinc-300 leading-relaxed">
-                      When building "funny" tools for hardware spoofing, ensure you are not violating the terms of service of the games or software you interact with. 
-                      <br /><br />
-                      This tool is designed for **visual spoofing** and **educational purposes**. Building a functional kernel-level spoofer requires advanced driver development knowledge.
+                {/* Step 2: Source Code */}
+                <div className="xl:col-span-2 space-y-6">
+                  <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 h-full flex flex-col">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-terminal-ink flex items-center justify-center text-black font-bold text-xs">3</div>
+                        <h3 className="font-bold">Spoofer Source Code (C#)</h3>
+                      </div>
+                      <span className="text-[10px] text-zinc-500 font-mono">Program.cs</span>
+                    </div>
+                    
+                    <p className="text-sm text-zinc-400 mb-4 italic">
+                      Copy this code into a new file named <code className="text-terminal-ink text-xs">Program.cs</code> in your repository. This code visually simulates the hardware spoofing on the Windows desktop.
                     </p>
-                  </div>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <ResourceCard title="C++ Drivers" desc="Learn Kernel Dev" url="https://docs.microsoft.com/en-us/windows-hardware/drivers/" />
-                    <ResourceCard title="GitHub Actions" desc="Master CI/CD" url="https://github.com/features/actions" />
+                    <div className="flex-1 bg-black p-6 rounded-lg font-mono text-[11px] text-terminal-ink/80 border border-terminal-dim overflow-y-auto max-h-[400px] custom-scrollbar">
+                      <pre>
+{`using System;
+using System.Threading;
+
+class Program {
+    static void Main(string[] args) {
+        Console.Title = "GhostSpec V4.2 - Secure Hardware Transmutation";
+        Console.ForegroundColor = ConsoleColor.Green;
+        
+        WriteLn("[PROCESS] Initializing GhostSpec Engine...");
+        Thread.Sleep(1000);
+        WriteLn("[AUTH] Verifying Administrator Privileges...");
+        Thread.Sleep(800);
+        WriteLn("[KERNEL] Mapping driver to 0x4F22BA00...");
+        
+        string[] mocks = {
+            "CPU: Rebranding to ${selectedProfile.cpu}...",
+            "GPU: Patching VBIOS registry strings...",
+            "NIC: Randomizing MAC Address to ${selectedProfile.mac}...",
+            "HWID: Recalculating system entropy...",
+            "SMBIOS: Overwriting serial: ${selectedProfile.motherboard}"
+        };
+
+        foreach(var msg in mocks) {
+            Thread.Sleep(600);
+            WriteLn("[SPOOF] " + msg);
+        }
+
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        WriteLn("\\n[SUCCESS] IDENTITY TRANSFORMATION COMPLETE.");
+        WriteLn("Current Active Profile: ${selectedProfile.name}");
+        WriteLn("Press any key to exit stealth mode...");
+        Console.ReadKey();
+    }
+
+    static void WriteLn(string msg) {
+        Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] " + msg);
+    }
+}`}
+                      </pre>
+                    </div>
+
+                    <div className="mt-6 p-4 bg-zinc-800/50 rounded-lg flex items-center justify-between">
+                      <div>
+                        <h4 className="text-xs font-bold mb-1 uppercase tracking-wider text-zinc-300">Ready to build?</h4>
+                        <p className="text-[10px] text-zinc-500">Your EXE will appear in the 'Actions' tab of your GitHub repo after you push these files.</p>
+                      </div>
+                      <button className="terminal-button flex items-center gap-2 px-4 py-2">
+                        <Save className="w-3 h-3" /> Copy Project Files
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
