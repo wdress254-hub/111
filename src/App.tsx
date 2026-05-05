@@ -296,46 +296,43 @@ export default function App() {
               className="p-8 h-full overflow-y-auto"
             >
               <header className="mb-8">
-                <h2 className="text-2xl font-bold mb-2">Auto-Build & CI/CD</h2>
-                <p className="text-zinc-500 max-w-2xl">This project is fully automated. When you export it to GitHub, an EXE will be built for you instantly.</p>
+                <h2 className="text-2xl font-bold mb-2">Auto-Build & Terminal Dashboard</h2>
+                <p className="text-zinc-500 max-w-2xl">This project is fully automated. When exported to GitHub, it builds a professional TUI (Terminal User Interface) dashboard similar to OPNsense or BIOS menus.</p>
               </header>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div className="space-y-6">
                   <div className="bg-terminal-ink/10 border border-terminal-ink/30 rounded-xl p-6 relative overflow-hidden group">
                     <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                      <Github className="w-24 h-24" />
+                      <Terminal className="w-24 h-24" />
                     </div>
                     <h3 className="text-xl font-bold text-terminal-ink mb-4 flex items-center gap-2">
-                      <ShieldCheck className="w-6 h-6" /> Step 1: Export to GitHub
+                       TUI EXE Dashboard
                     </h3>
                     <p className="text-sm text-zinc-300 leading-relaxed mb-6">
-                      Click the <span className="text-white font-bold">Settings</span> icon in the top toolbar and select <span className="text-white font-bold">Export to GitHub</span>. This will create a fresh repository in your account with all the source code and build actions.
+                      Your generated EXE doesn't just run a script—it launches a full <b>Spectre.Console</b> dashboard with real-time progress bars, tables, and formatted status reports.
                     </p>
                     <div className="flex items-center gap-2 text-xs font-mono text-zinc-500">
-                      <span className="w-2 h-2 rounded-full bg-terminal-ink animate-pulse" /> Ready for deployment
+                      <span className="w-2 h-2 rounded-full bg-terminal-ink animate-pulse" /> Retro Terminal Aesthetic
                     </div>
                   </div>
 
                   <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
                     <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-                      <Terminal className="w-5 h-5 text-white" /> Step 2: Grab your EXE
+                      <ShieldCheck className="w-5 h-5 text-white" /> Deployment Steps
                     </h3>
-                    <p className="text-sm text-zinc-400 mb-4">
-                      Once exported, go to your new GitHub Repo's <span className="text-terminal-ink uppercase font-bold text-xs">Actions</span> tab. You will see a workflow named <code className="text-zinc-300 bg-black px-1 rounded">Build GhostSpec EXE</code> running.
-                    </p>
                     <ul className="space-y-3 text-xs text-zinc-500">
                       <li className="flex items-start gap-2">
                         <ChevronRight className="w-4 h-4 text-terminal-ink shrink-0" />
-                        <span>Wait 1-2 minutes for the Windows runner to finish.</span>
+                        <span>Go to <b>Settings &gt; Export to GitHub</b> to create your private repository.</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <ChevronRight className="w-4 h-4 text-terminal-ink shrink-0" />
-                        <span>Click the most recent run (e.g., "Initial Export").</span>
+                        <span>The <b>GitHub Action</b> will automatically fetch dependencies and compile the TUI.</span>
                       </li>
                       <li className="flex items-start gap-2">
                         <ChevronRight className="w-4 h-4 text-terminal-ink shrink-0" />
-                        <span>Scroll down to <span className="text-white">Artifacts</span> and download <span className="text-terminal-ink">GhostSpec-Windows-EXE</span>.</span>
+                        <span>Download the artifact from the <b>Actions</b> tab of your repo.</span>
                       </li>
                     </ul>
                   </div>

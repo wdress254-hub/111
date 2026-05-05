@@ -1,114 +1,70 @@
 using System;
-using System.Drawing;
-using System.Windows.Forms;
+using System.Threading;
 using System.Threading.Tasks;
+using Spectre.Console;
 
 namespace GhostSpec
 {
-    public class GhostForm : Form
+    class Program
     {
-        private ListBox logBox;
-        private Button startButton;
-        private ProgressBar progressBar;
-        private Label statusLabel;
-
-        public GhostForm()
+        static async Task Main(string[] args)
         {
-            this.Text = "GhostSpec V4.2 - Hardware Identity Spoofer";
-            this.Size = new Size(600, 450);
-            this.BackColor = Color.FromArgb(10, 10, 11);
-            this.ForeColor = Color.FromArgb(0, 255, 65);
-            this.Font = new Font("Consolas", 10);
-            this.FormBorderStyle = FormBorderStyle.FixedSingle;
-            this.MaximizeBox = false;
+            Console.Title = "GhostSpec V4.2 - Advanced System Transmutation Dashboard";
 
-            Label title = new Label()
+            // Header Section
+            AnsiConsole.Write(
+                new FigletText("GHOSTSPEC")
+                    .LeftAligned()
+                    .Color(Color.SpringGreen));
+
+            AnsiConsole.Write(new Rule("[yellow]ENTERPRISE HARDWARE IDENTITY SPOOFER v4.2.0-STABLE[/]").LeftAligned());
+            AnsiConsole.WriteLine();
+
+            // System Info Table (The "Funny" Spec Dashboard)
+            var table = new Table().Border(TableBorder.Rounded);
+            table.AddColumn("[grey]COMPONENT[/]");
+            table.AddColumn("[green]SPOOFED IDENTITY[/]");
+            table.AddColumn("[grey]STATUS[/]");
+
+            table.AddRow("Processor (CPU)", "AMD Ryzen Threadripper PRO 7995WX (96 Cores)", "[green]MASKED[/]");
+            table.AddRow("Graphics (GPU)", "4x NVIDIA RTX 6000 Ada Generation", "[green]MASKED[/]");
+            table.AddRow("System RAM", "10 TB LPDDR5X (Quantum Channel)", "[green]MASKED[/]");
+            table.AddRow("Motherboard", "Andromeda Galaxy V2 Prototype", "[green]MASKED[/]");
+            table.AddRow("MAC Address", "DE:AD:BE:EF:CA:FE", "[green]MASKED[/]");
+            table.AddRow("Hardware ID", "HWID-GHOST-9FX-INFINITY-034", "[green]MASKED[/]");
+
+            AnsiConsole.Write(table);
+            AnsiConsole.WriteLine();
+
+            // Action Section
+            if (AnsiConsole.Confirm("Execute Layer-2 Identity Transmutation?"))
             {
-                Text = "GHOSTSPEC ENGINE",
-                Font = new Font("Consolas", 18, FontStyle.Bold),
-                Location = new Point(20, 20),
-                AutoSize = true
-            };
+                await AnsiConsole.Progress()
+                    .StartAsync(async ctx =>
+                    {
+                        var task1 = ctx.AddTask("[green]Mapping Kernel Drivers[/]");
+                        var task2 = ctx.AddTask("[green]Randomizing HWID Entropy[/]");
+                        var task3 = ctx.AddTask("[green]Bypassing Anti-Cheat Hooks[/]");
 
-            logBox = new ListBox()
+                        while (!ctx.IsFinished)
+                        {
+                            await Task.Delay(50);
+                            task1.Increment(1.5);
+                            task2.Increment(1.0);
+                            task3.Increment(0.8);
+                        }
+                    });
+
+                AnsiConsole.MarkupLine("[bold green]SPOOF SUCCESSFUL.[/] Your system footprint is now [underline]invisible[/].");
+            }
+            else
             {
-                Location = new Point(20, 60),
-                Size = new Size(540, 250),
-                BackColor = Color.Black,
-                ForeColor = Color.FromArgb(0, 255, 65),
-                BorderStyle = BorderStyle.FixedSingle
-            };
-
-            progressBar = new ProgressBar()
-            {
-                Location = new Point(20, 320),
-                Size = new Size(540, 10),
-                Style = ProgressBarStyle.Continuous
-            };
-
-            statusLabel = new Label()
-            {
-                Text = "STATUS: SYSTEM READY",
-                Location = new Point(20, 340),
-                AutoSize = true
-            };
-
-            startButton = new Button()
-            {
-                Text = "ENGAGE STEALTH MODE",
-                Location = new Point(360, 340),
-                Size = new Size(200, 40),
-                FlatStyle = FlatStyle.Flat,
-                BackColor = Color.FromArgb(0, 255, 65),
-                ForeColor = Color.Black,
-                Font = new Font("Consolas", 10, FontStyle.Bold)
-            };
-            startButton.Click += async (s, e) => await StartSpoofSequence();
-
-            this.Controls.Add(title);
-            this.Controls.Add(logBox);
-            this.Controls.Add(progressBar);
-            this.Controls.Add(statusLabel);
-            this.Controls.Add(startButton);
-        }
-
-        private async Task StartSpoofSequence()
-        {
-            startButton.Enabled = false;
-            logBox.Items.Clear();
-            progressBar.Value = 0;
-            statusLabel.Text = "STATUS: INITIALIZING TRANSFORMATION...";
-
-            string[] logs = {
-                "[PROCESS] Initializing Engine...",
-                "[AUTH] Bypassing UAC...",
-                "[KERNEL] Mapping Virtual Driver...",
-                "[CPU] Spoofing: Quantum Singularity Core XT",
-                "[GPU] Hiding: NVIDIA RTX 9090 Super (Mock)",
-                "[NIC] MAC Address Randomized...",
-                "[HWID] Entropy Reset Complete.",
-                "[DONE] Identity is now GHOST."
-            };
-
-            for (int i = 0; i < logs.Length; i++)
-            {
-                logBox.Items.Add($"[{DateTime.Now:HH:mm:ss}] {logs[i]}");
-                logBox.SelectedIndex = logBox.Items.Count - 1;
-                progressBar.Value = (int)(((float)(i + 1) / logs.Length) * 100);
-                await Task.Delay(600);
+                AnsiConsole.MarkupLine("[red]Operation aborted by user.[/]");
             }
 
-            statusLabel.Text = "STATUS: STEALTH MODE ACTIVE";
-            MessageBox.Show("System successfully spoofed (Visual Only).", "GhostSpec Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            startButton.Enabled = true;
-        }
-
-        [STAThread]
-        static void Main()
-        {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new GhostForm());
+            AnsiConsole.WriteLine();
+            AnsiConsole.MarkupLine("[grey]Press ANY key to disconnect from stealth...[/]");
+            Console.ReadKey(true);
         }
     }
 }
