@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --color-terminal-bg: #0A0A0B;
+  --color-terminal-ink: #00FF41;
+  --color-terminal-dim: #003B11;
+  --color-terminal-border: #1A1A1E;
+}
+
+body {
+  @apply bg-terminal-bg text-white font-sans antialiased;
+}
+
+.terminal-glow {
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.4);
+}
+
+.terminal-border {
+  @apply border border-terminal-border;
+}
+
+.terminal-input {
+  @apply bg-zinc-900 border border-zinc-800 focus:border-terminal-ink focus:outline-none px-3 py-2 rounded font-mono text-sm transition-colors;
+}
+
+.terminal-button {
+  @apply bg-terminal-ink text-black font-bold px-4 py-2 rounded hover:bg-terminal-ink/90 active:scale-95 transition-all text-sm uppercase tracking-wider;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-zinc-950;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-zinc-800 rounded-full hover:bg-zinc-700 transition-colors;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-terminal-ink/20 hover:bg-terminal-ink/40;
+}
+
+.glass-panel {
+  @apply bg-black/40 backdrop-blur-md border border-terminal-border rounded-xl;
+}
+
+@keyframes glitch {
+  0% { transform: translate(0) }
+  20% { transform: translate(-2px, 2px) }
+  40% { transform: translate(-2px, -2px) }
+  60% { transform: translate(2px, 2px) }
+  80% { transform: translate(2px, -2px) }
+  100% { transform: translate(0) }
+}
+
+.hover-glitch:hover {
+  animation: glitch 0.3s cubic-bezier(.25,.46,.45,.94) both infinite;
+}

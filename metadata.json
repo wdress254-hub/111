@@ -1,0 +1,6 @@
+{
+  "name": "GhostSpec",
+  "description": "A high-tech system hardware profile generator and visual 'spoofing' simulator for creating elite mock identities. Includes GitHub Action templates for 'exe' building.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
