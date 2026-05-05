@@ -1,65 +1,114 @@
 using System;
-using System.Threading;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Threading.Tasks;
 
 namespace GhostSpec
 {
-    class Program
+    public class GhostForm : Form
     {
-        static void Main(string[] args)
+        private ListBox logBox;
+        private Button startButton;
+        private ProgressBar progressBar;
+        private Label statusLabel;
+
+        public GhostForm()
         {
-            Console.Title = "GhostSpec V4.2 - SECURE HARDWARE TRANSMUTATION";
-            Console.ForegroundColor = ConsoleColor.Green;
-            
-            PrintLogo();
-            
-            WriteLn("[PROCESS] Initializing GhostSpec Engine v4.2.0...");
-            Thread.Sleep(1200);
-            WriteLn("[AUTH] Bypassing User-Mode checks...");
-            Thread.Sleep(800);
-            WriteLn("[KERNEL] Mapping driver to 0x" + Guid.NewGuid().ToString().Substring(0, 8).ToUpper() + "...");
-            Thread.Sleep(1000);
-            
-            string[] operations = {
-                "CPU: Rebranding to Quantum Singularity Core XT...",
-                "GPU: Mapping patch to VBIOS registry...",
-                "NIC: Randomizing MAC: DE:AD:BE:EF:CA:FE...",
-                "DISK: Overwriting Volume ID: " + Guid.NewGuid().ToString().ToUpper(),
-                "HWID: Recalculating system entropy footprint..."
+            this.Text = "GhostSpec V4.2 - Hardware Identity Spoofer";
+            this.Size = new Size(600, 450);
+            this.BackColor = Color.FromArgb(10, 10, 11);
+            this.ForeColor = Color.FromArgb(0, 255, 65);
+            this.Font = new Font("Consolas", 10);
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+
+            Label title = new Label()
+            {
+                Text = "GHOSTSPEC ENGINE",
+                Font = new Font("Consolas", 18, FontStyle.Bold),
+                Location = new Point(20, 20),
+                AutoSize = true
             };
 
-            foreach(var op in operations)
+            logBox = new ListBox()
             {
-                WriteLn("[SPOOF] " + op);
-                Thread.Sleep(700);
+                Location = new Point(20, 60),
+                Size = new Size(540, 250),
+                BackColor = Color.Black,
+                ForeColor = Color.FromArgb(0, 255, 65),
+                BorderStyle = BorderStyle.FixedSingle
+            };
+
+            progressBar = new ProgressBar()
+            {
+                Location = new Point(20, 320),
+                Size = new Size(540, 10),
+                Style = ProgressBarStyle.Continuous
+            };
+
+            statusLabel = new Label()
+            {
+                Text = "STATUS: SYSTEM READY",
+                Location = new Point(20, 340),
+                AutoSize = true
+            };
+
+            startButton = new Button()
+            {
+                Text = "ENGAGE STEALTH MODE",
+                Location = new Point(360, 340),
+                Size = new Size(200, 40),
+                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.FromArgb(0, 255, 65),
+                ForeColor = Color.Black,
+                Font = new Font("Consolas", 10, FontStyle.Bold)
+            };
+            startButton.Click += async (s, e) => await StartSpoofSequence();
+
+            this.Controls.Add(title);
+            this.Controls.Add(logBox);
+            this.Controls.Add(progressBar);
+            this.Controls.Add(statusLabel);
+            this.Controls.Add(startButton);
+        }
+
+        private async Task StartSpoofSequence()
+        {
+            startButton.Enabled = false;
+            logBox.Items.Clear();
+            progressBar.Value = 0;
+            statusLabel.Text = "STATUS: INITIALIZING TRANSFORMATION...";
+
+            string[] logs = {
+                "[PROCESS] Initializing Engine...",
+                "[AUTH] Bypassing UAC...",
+                "[KERNEL] Mapping Virtual Driver...",
+                "[CPU] Spoofing: Quantum Singularity Core XT",
+                "[GPU] Hiding: NVIDIA RTX 9090 Super (Mock)",
+                "[NIC] MAC Address Randomized...",
+                "[HWID] Entropy Reset Complete.",
+                "[DONE] Identity is now GHOST."
+            };
+
+            for (int i = 0; i < logs.Length; i++)
+            {
+                logBox.Items.Add($"[{DateTime.Now:HH:mm:ss}] {logs[i]}");
+                logBox.SelectedIndex = logBox.Items.Count - 1;
+                progressBar.Value = (int)(((float)(i + 1) / logs.Length) * 100);
+                await Task.Delay(600);
             }
 
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("\n--------------------------------------------------");
-            WriteLn("[SUCCESS] SYSTEM IDENTITY TRANSMUTATION COMPLETE.");
-            WriteLn("STATUS: STEALTH MODE ACTIVE");
-            Console.WriteLine("--------------------------------------------------\n");
-            
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.WriteLine("Your computer is now 'funny'. Press any key to exit stealth.");
-            Console.ReadKey();
+            statusLabel.Text = "STATUS: STEALTH MODE ACTIVE";
+            MessageBox.Show("System successfully spoofed (Visual Only).", "GhostSpec Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            startButton.Enabled = true;
         }
 
-        static void WriteLn(string msg)
+        [STAThread]
+        static void Main()
         {
-            Console.WriteLine($"[{DateTime.Now:HH:mm:ss}] " + msg);
-        }
-
-        static void PrintLogo()
-        {
-            Console.WriteLine(@"
-   ____ _                     _FN___                    
-  / ___| |__   ___  ___  ___ / ___|_ __   ___  ___ 
- | |  _| '_ \ / _ \/ __|/ __|\___ \ '_ \ / _ \/ __|
- | |_| | | | | (_) \__ \ (__  ___) | |_) |  __/ (__ 
-  \____|_| |_|\___/|___/\___||____/| .__/ \___|\___|
-                                   |_|               
-            ");
-            Console.WriteLine("  --- THE ELITE HARDWARE IDENTITY SIMULATOR ---\n");
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new GhostForm());
         }
     }
 }
