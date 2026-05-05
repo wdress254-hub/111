@@ -14,10 +14,9 @@ namespace GhostSpec
             // Header Section
             AnsiConsole.Write(
                 new FigletText("GHOSTSPEC")
-                    .LeftAligned()
-                    .Color(Color.SpringGreen));
+                    .Color(Color.Green));
 
-            AnsiConsole.Write(new Rule("[yellow]ENTERPRISE HARDWARE IDENTITY SPOOFER v4.2.0-STABLE[/]").LeftAligned());
+            AnsiConsole.Write(new Rule("[yellow]ENTERPRISE HARDWARE IDENTITY SPOOFER v4.2.0-STABLE[/]"));
             AnsiConsole.WriteLine();
 
             // System Info Table (The "Funny" Spec Dashboard)
